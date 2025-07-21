@@ -158,6 +158,13 @@ classDiagram
     LabelElement --> "*" LabelObserver
     CompositeLabelElement --> "*" LabelObserver
     LabelObserver <|.. LoggerObserver
+    App ..> LabelElementBuilder : uses
+    App ..> LabelModelBuilder : uses
+    LabelModelBuilder ..> LabelModel
+    LabelModel --> "1..*" ILabelElement : elements
+    LabelElementBuilder ..> LabelElement : build()
+
+
 ```
 
 # Diagramme de séquence : Création d’un LabelModel avec notification
@@ -205,4 +212,10 @@ sequenceDiagram
     Deco->>LE2: getContent()
     Model->>Barcode: getContent()
     Model->>Promo: getContent()
+
+    App->>LE1: addObserver(Logger)
+    App->>LE2: addObserver(Logger)
+    App->>Barcode: addObserver(Logger)
+    App->>Promo: addObserver(Logger)
+
 ```
