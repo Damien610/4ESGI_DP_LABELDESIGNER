@@ -31,27 +31,6 @@ public class App {
     }
 
     public static void main(String[] args) {
-        CompositeLabelElement blocPrix = new CompositeLabelElement();
-        blocPrix.setPositionX(10);
-        blocPrix.setPositionY(50);
-        blocPrix.setWidth(200);
-        blocPrix.setHeight(40);
-
-        blocPrix.addElement(new LabelElementBuilder()
-                .withPositionX(10).withPositionY(50)
-                .withWidth(100).withHeight(20)
-                .withType(TypeElement.TEXT)
-                .withContent("12,99 €")
-                .build());
-
-        blocPrix.addElement(new LabelElementBuilder()
-                .withPositionX(10).withPositionY(70)
-                .withWidth(100).withHeight(20)
-                .withType(TypeElement.TEXT)
-                .withContent("Reference")
-                .withUppercase(true)
-                .build());
-
 
         LabelElement barcodeElement = new LabelElementBuilder()
                 .withType(TypeElement.BARCODE)
@@ -73,6 +52,26 @@ public class App {
                 .withObserver(new LoggerObserver())
                 .build();
 
+        CompositeLabelElement blocPrix = new CompositeLabelElement();
+        blocPrix.setPositionX(10);
+        blocPrix.setPositionY(50);
+        blocPrix.setWidth(200);
+        blocPrix.setHeight(40);
+
+        blocPrix.addElement(new LabelElementBuilder()
+                .withPositionX(10).withPositionY(50)
+                .withWidth(100).withHeight(20)
+                .withType(TypeElement.TEXT)
+                .withContent("12,99 €")
+                .build());
+
+        blocPrix.addElement(new LabelElementBuilder()
+                .withPositionX(10).withPositionY(70)
+                .withWidth(100).withHeight(20)
+                .withType(TypeElement.TEXT)
+                .withContent("Reference")
+                .withUppercase(true)
+                .build());
 
         CompositeLabelElement decoratedBlocPrix = decorateCompositeElements(blocPrix);
 
