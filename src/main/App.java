@@ -10,6 +10,26 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 public class App {
+
+    public static void printLabel(LabelModel label) {
+        System.out.println("Label créé : " + label.getName());
+
+        for (ILabelElement e : label.getElements()) {
+            printElement(e, "  ");
+        }
+    }
+
+    public static void printElement(ILabelElement element, String indent) {
+        if (element instanceof CompositeLabelElement composite) {
+            System.out.println(indent + "- Composite [" + composite.getType() + "] :");
+            for (ILabelElement child : composite.getChildren()) {
+                printElement(child, indent + "  ");
+            }
+        } else {
+            System.out.println(indent + "- Element [" + element.getType() + "] : " + element.getContent());
+        }
+    }
+
     public static void main(String[] args) {
         CompositeLabelElement blocPrix = new CompositeLabelElement();
         blocPrix.setPositionX(10);
@@ -34,16 +54,27 @@ public class App {
 
 
         LabelElement barcodeElement = new LabelElementBuilder()
+                .withType(TypeElement.BARCODE)
+                .withContent("123456789012")
                 .withPositionX(10)
                 .withPositionY(80)
                 .withWidth(150)
                 .withHeight(40)
-                .withType(TypeElement.BARCODE)
-                .withContent("123456789012")
+                .withObserver(new LoggerObserver())
                 .build();
 
-        CompositeLabelElement decoratedBlocPrix = decorateCompositeElements(blocPrix);
+        LabelElement promoText = new LabelElementBuilder()
+                .withType(TypeElement.TEXT)
+                .withContent("Promo du jour")
+                .withPositionX(20)
+                .withPositionY(130)
+                .withWidth(200)
+                .withHeight(20)
+                .withObserver(new LoggerObserver())
+                .build();
 
+
+        CompositeLabelElement decoratedBlocPrix = decorateCompositeElements(blocPrix);
 
         LabelModel label = new LabelModelBuilder()
                 .withName("Étiquette Article")
@@ -51,13 +82,11 @@ public class App {
                 .withWidth(300)
                 .withHeight(150)
                 .withCreatedAt(LocalDateTime.now())
-                .withElements(Arrays.asList(decoratedBlocPrix, barcodeElement))
+                .withElements(Arrays.asList(decoratedBlocPrix, barcodeElement, promoText))
                 .build();
 
-        System.out.println("Label créé : " + label.getName());
-        label.getElements().forEach(e ->
-                System.out.println("- Element [" + e.getType() + "] : " + e.getContent())
-        );
+        label.addObserver(new LoggerObserver());
+        printLabel(label);
     }
 
 

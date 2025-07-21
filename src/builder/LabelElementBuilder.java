@@ -1,26 +1,31 @@
 package builder;
 
 import model.*;
+import observer.LabelObserver;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LabelElementBuilder {
-
     private int positionX;
     private int positionY;
     private int width;
     private int height;
-    private TypeElement type = TypeElement.TEXT;
-    private String police = "Arial";
-    private String size = "12";
+    private TypeElement type;
+    private String police;
+    private String size;
     private String content;
-    private boolean uppercase = false;
+    private boolean uppercase;
 
-    public LabelElementBuilder withPositionX(int positionX) {
-        this.positionX = positionX;
+    private final List<LabelObserver> observers = new ArrayList<>(); // 👈
+
+    public LabelElementBuilder withPositionX(int x) {
+        this.positionX = x;
         return this;
     }
 
-    public LabelElementBuilder withPositionY(int positionY) {
-        this.positionY = positionY;
+    public LabelElementBuilder withPositionY(int y) {
+        this.positionY = y;
         return this;
     }
 
@@ -39,6 +44,11 @@ public class LabelElementBuilder {
         return this;
     }
 
+    public LabelElementBuilder withContent(String content) {
+        this.content = content;
+        return this;
+    }
+
     public LabelElementBuilder withPolice(String police) {
         this.police = police;
         return this;
@@ -49,28 +59,33 @@ public class LabelElementBuilder {
         return this;
     }
 
-    public LabelElementBuilder withContent(String content) {
-        this.content = content;
+    public LabelElementBuilder withUppercase(boolean value) {
+        this.uppercase = value;
         return this;
     }
 
-    public LabelElementBuilder withUppercase(boolean uppercase) {
-        this.uppercase = uppercase;
+    public LabelElementBuilder withObserver(LabelObserver observer) {
+        this.observers.add(observer);
         return this;
     }
 
     public LabelElement build() {
         LabelElement element = new LabelElement();
+
+        for (LabelObserver observer : observers) {
+            element.addObserver(observer);
+        }
+
         element.setPositionX(positionX);
         element.setPositionY(positionY);
         element.setWidth(width);
         element.setHeight(height);
         element.setType(type);
+        element.setContent(content);
         element.setPolice(police);
         element.setSize(size);
-        element.setContent(content);
         element.setUppercase(uppercase);
+
         return element;
     }
 }
-

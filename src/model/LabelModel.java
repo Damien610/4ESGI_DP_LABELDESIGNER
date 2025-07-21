@@ -1,5 +1,7 @@
 package model;
 
+import observer.LabelObserver;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +12,7 @@ public class LabelModel {
     private float width;
     private float height;
     private LocalDateTime createdAt;
-
+    private List<LabelObserver> observers = new ArrayList<>();
     private List<ILabelElement> elements = new ArrayList<>();
 
     public String getName() {
@@ -59,6 +61,21 @@ public class LabelModel {
 
     public void setElements(List<ILabelElement> elements) {
         this.elements = elements;
+    }
+
+    public void addObserver(LabelObserver observer) {
+        observers.add(observer);
+    }
+
+    public void notifyObservers(String property, Object oldValue, ILabelElement newValue) {
+        for (LabelObserver observer : observers) {
+            observer.onElementChanged(newValue, property, oldValue, newValue);
+        }
+    }
+
+    public void addElement(ILabelElement element) {
+        this.elements.add(element);
+        notifyObservers("addElement", null, element);
     }
 }
 

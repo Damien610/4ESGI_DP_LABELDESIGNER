@@ -57,7 +57,9 @@ public class LabelModelBuilder {
         model.setWidth(width);
         model.setHeight(height);
         model.setCreatedAt(createdAt);
-        model.setElements(elements);
+        for (ILabelElement e : this.elements) {
+            model.addElement(e);
+        }
         return model;
     }
 }

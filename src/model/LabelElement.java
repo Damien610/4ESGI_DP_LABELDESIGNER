@@ -111,6 +111,9 @@ public class LabelElement implements ILabelElement {
 
     @Override
     public String toString() {
-        return "[LabelElement: " + getContent() + "]";
+        String typeLabel = (type != null) ? type.name() : "(building)";
+        String contentLabel = (content != null) ? content : "(building)";
+        return "[LabelElement " + typeLabel + ": " + contentLabel + "]";
     }
+
 }
